@@ -5,7 +5,16 @@ import { useData, useTheme, useTranslation } from "../hooks/"
 import { Block, Button, Image, Input, Product, Text } from "../components/"
 import Geocoder from "react-native-geocoding"
 import { Coordinates, CalculationMethod, PrayerTimes } from "adhan"
-import { SafeAreaView, View, FlatList, StyleSheet } from "react-native"
+import {
+  SafeAreaView,
+  View,
+  FlatList,
+  StyleSheet,
+  Dimensions,
+} from "react-native"
+import { Card, Icon } from "@rneui/themed"
+import { ListItem, Avatar } from "@rneui/themed"
+
 import moment from "moment"
 
 function Home() {
@@ -17,8 +26,11 @@ function Home() {
   const [location, setLocation] = useState<Location.LocationObject>()
   const [errorMsg, setErrorMsg] = useState<string>("")
   const [city, setCity] = useState<string>("")
+  const [country, setCountry] = useState<string>("")
 
-  Geocoder.init("")
+  const windowHeight = Dimensions.get("window").height
+
+  Geocoder.init("AIzaSyCtN-aBKLvEPdccklwQRFgquGK8S_cHu6g")
 
   useEffect(() => {
     ;(async () => {
@@ -70,9 +82,11 @@ function Home() {
     Number(location?.coords.longitude)
   )
     .then((json) => {
-      var addressComponent = json.results[0].address_components[3].long_name
+      const addressComponent = json.results[0].address_components[3].long_name
+      const countryData = json.results[0].address_components[5].long_name
+
       setCity(addressComponent)
-      //  console.log(addressComponent)
+      setCountry(countryData)
     })
     .catch((error) => console.warn(error))
 
@@ -90,45 +104,200 @@ function Home() {
       id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
       title: "Fajr",
       time: moment(prayerTimes.fajr).format("h:mm A"),
+      avatar_url: <Icon name="sunrise" type="feather" color="#00a360" />,
     },
     {
       id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
       title: "Dhur",
       time: moment(prayerTimes.dhuhr).format("h:mm A"),
+      avatar_url: <Icon name="sun" type="font-awesome-5" color="#00a360" />,
     },
     {
       id: "58694a0f-3da1-471f-bd96-145571e29d72",
       title: "Asr",
       time: moment(prayerTimes.asr).format("h:mm A"),
+      avatar_url: (
+        <Icon name="cloud-sun" type="font-awesome-5" color="#00a360" />
+      ),
     },
     {
       id: "58694addzzz0f-3da1-47efefef-bd96-145571e29d72",
       title: "Maghrib",
       time: moment(prayerTimes.maghrib).format("h:mm A"),
+      avatar_url: <Icon name="sunset" type="feather" color="#00a360" />,
     },
     {
       id: "58694addzzz0f-3dadddd1-471f-bd96-145571e29d72",
       title: "Isha",
       time: moment(prayerTimes.isha).format("h:mm A"),
+      avatar_url: <Icon name="moon" type="feather" color="#00a360" />,
     },
   ]
 
   const salat = JSON.stringify(prayerTimes)
   return (
     <Block>
+      <View
+        style={{
+          backgroundColor: colors.white,
+          borderRadius: sizes.m,
+          marginBottom: sizes.xl,
+          margin: sizes.base,
+        }}
+      >
+        <View
+          style={{
+            width: "100%",
+            height: 250,
+          }}
+        >
+          <Image
+            source={{
+              uri: "https://images.pexels.com/photos/1537086/pexels-photo-1537086.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+            }}
+            resizeMode="cover"
+            style={{
+              width: "100%",
+              height: "100%",
+              borderTopLeftRadius: sizes.m,
+              borderTopRightRadius: sizes.m,
+            }}
+          />
+          <Block
+            right={20}
+            top={20}
+            flex={0}
+            row
+            align="center"
+            position="absolute"
+          >
+            <Icon name="map-pin" type="font-awesome-5" color="#FFFFFF" />
+            <Text
+              h5
+              font={fonts.bold}
+              color={colors.white}
+              marginLeft={sizes.s}
+              style={{
+                textShadowColor: "rgba(0, 0, 0, 0.75)",
+                textShadowOffset: { width: -1, height: 1 },
+                textShadowRadius: 10,
+              }}
+            >
+              {city}, {country}
+            </Text>
+          </Block>
+          <Block
+            left={20}
+            top={70}
+            flex={0}
+            row
+            align="center"
+            position="absolute"
+          >
+            <Text
+              h4
+              font={fonts.bold}
+              color={colors.white}
+              marginLeft={sizes.s}
+              style={{
+                textShadowColor: "rgba(0, 0, 0, 0.75)",
+                textShadowOffset: { width: -1, height: 1 },
+                textShadowRadius: 10,
+              }}
+            >
+              Next prayer :
+            </Text>
+          </Block>
+          <Block
+            left={25}
+            top={110}
+            flex={0}
+            row
+            align="center"
+            position="absolute"
+          >
+            <Text
+              h3
+              font={fonts.bold}
+              color={colors.white}
+              marginLeft={sizes.s}
+              style={{
+                textShadowColor: "rgba(0, 0, 0, 0.75)",
+                textShadowOffset: { width: -1, height: 1 },
+                textShadowRadius: 10,
+              }}
+            >
+              5:04 am
+            </Text>
+          </Block>
+          <Block
+            left={20}
+            top={160}
+            flex={0}
+            row
+            align="center"
+            position="absolute"
+          >
+            <Text
+              h2
+              font={fonts.bold}
+              color={colors.white}
+              marginLeft={sizes.s}
+              style={{
+                textShadowColor: "rgba(0, 0, 0, 0.75)",
+                textShadowOffset: { width: -1, height: 1 },
+                textShadowRadius: 10,
+              }}
+            >
+              Fajr
+            </Text>
+          </Block>
+        </View>
+      </View>
       {/* search input */}
-      <Text>You're in {city}</Text>
-      <FlatList
+
+      {/* <FlatList
         data={DATA}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
-      />
-      <Block color={colors.card} flex={0} padding={sizes.padding}>
-        <Input search placeholder={t("common.search")} />
+      /> */}
+
+      {/* <Block>
+        <Card>
+          <Card.Title>
+            {" "}
+            {city}, {country}{" "}
+          </Card.Title>
+          <Card.Divider />
+          <Card.Image
+            resizeMode="contain"
+            style={{ padding: 0 }}
+            source={{
+              uri: "https://images.pexels.com/photos/1537086/pexels-photo-1537086.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+            }}
+          />
+          <Text style={{ marginBottom: 5 }}>
+            The idea with React Native Elements is more about component
+            structure than actual design.
+          </Text>
+        </Card>
+      </Block> */}
+
+      <Block marginTop={20}>
+        {DATA.map((l, i) => (
+          <ListItem key={i} bottomDivider>
+            <ListItem.Subtitle>{l.avatar_url}</ListItem.Subtitle>
+
+            <ListItem.Content>
+              <ListItem.Title>{l.title}</ListItem.Title>
+              <ListItem.Subtitle>{l.time}</ListItem.Subtitle>
+            </ListItem.Content>
+          </ListItem>
+        ))}
       </Block>
 
       {/* toggle products list */}
-      <Block
+      {/* <Block
         row
         flex={0}
         align="center"
@@ -185,10 +354,10 @@ function Home() {
             </Text>
           </Block>
         </Button>
-      </Block>
+      </Block> */}
 
       {/* products list */}
-      <Block
+      {/* <Block
         scroll
         paddingHorizontal={sizes.padding}
         showsVerticalScrollIndicator={false}
@@ -199,7 +368,7 @@ function Home() {
             <Product {...product} key={`card-${product?.id}`} />
           ))}
         </Block>
-      </Block>
+      </Block> */}
     </Block>
   )
 }
@@ -221,6 +390,9 @@ const styles = StyleSheet.create({
   time: {
     fontSize: 32,
     color: "#fffff",
+  },
+  prayerContainer: {
+    height: "100vh",
   },
 })
 

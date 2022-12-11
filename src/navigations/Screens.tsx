@@ -12,11 +12,16 @@ export default () => {
   const screenOptions = useScreenOptions()
 
   return (
-    <Stack.Navigator screenOptions={screenOptions.stack}>
+    // <Stack.Navigator screenOptions={screenOptions.stack}>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <Stack.Screen
         name="Home"
         component={Home}
-        options={{ title: t("navigation.home") }}
+        //  options={{ title: t("navigation.home") }}
       />
 
       {/* <Stack.Screen
